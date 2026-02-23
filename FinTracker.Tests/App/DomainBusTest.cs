@@ -6,16 +6,9 @@ namespace FinTracker.Tests.App;
 
 readonly record struct TestEvent() : IDomainEvent;
 
-class TestHandler(ExecutorChecker checker) : IDomainEventHandler<TestEvent>
+class TestHandler(ExecutionChecker checker) : IDomainEventHandler<TestEvent>
 {
-    public async Task Handle(TestEvent domainEvent) => checker.MarkAsExecuted();
-}
-
-class ExecutorChecker
-{
-    public bool IsExecute { get; private set; } = false;
-
-    public void MarkAsExecuted() => IsExecute = true;
+    public async Task Handle(TestEvent domainEvent) => checker.MarkAsExecuted(GetType());
 }
 
 public class DomainBusTest
@@ -28,7 +21,7 @@ public class DomainBusTest
             .AddSingleton((provider) => new DomainEventRegistry().RegisterHandler<TestEvent, TestHandler>())
             .AddScoped<HandlerFactory>()
             .AddScoped<TestHandler>()
-            .AddScoped<ExecutorChecker>()
+            .AddScoped<ExecutionChecker>()
             .AddScoped<IDomainBus, DomainBus.DomainBus>()
             .BuildServiceProvider();
     }
@@ -40,6 +33,6 @@ public class DomainBusTest
 
         await domainBus.Emit(new TestEvent());
 
-        Assert.True(_serviceProvider.GetRequiredService<ExecutorChecker>().IsExecute);
+        Assert.True(_serviceProvider.GetRequiredService<ExecutionChecker>().IsExecuted<TestHandler>(1));
     }
 }
