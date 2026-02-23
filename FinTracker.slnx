@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="FinTracker.Domain/FinTracker.Domain.csproj" />
+  <Project Path="FinTracker.Tests/FinTracker.Tests.csproj" />
+  <Project Path="FinTracker/FinTracker.csproj" />
+</Solution>
