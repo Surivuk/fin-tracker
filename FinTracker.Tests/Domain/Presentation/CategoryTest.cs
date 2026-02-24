@@ -4,18 +4,30 @@ namespace FinTracker.Tests.Domain.Presentation;
 
 public class CategoryTest
 {
+    private readonly EntityId _categoryId = EntityId.From(Guid.NewGuid().ToString());
+    private readonly EntityId _userId = EntityId.From(Guid.NewGuid().ToString());
+
     [Fact]
-    public void ShouldBeUpdatable()
+    public void ShouldChangeInformation()
     {
-        var newTitle = "New title";
-        var newDescription = "New Description";
+        var newInformation = EntityInformation.New("New title", "New Description");
 
-        var category = new Category("cat-id", "The Category", "This is the first category");
+        var category = new Category(_categoryId, _userId, EntityInformation.New("The Category", "This is the first category"), new(HexColor.Default));
 
-        category.ChangeTitle(newTitle);
-        category.ChangeDescription(newDescription);
+        category.ChangeInformation(newInformation);
 
-        Assert.Equal(newTitle, category.Title);
-        Assert.Equal(newDescription, category.Description);
+        Assert.Equal(newInformation, category.Information);
+    }
+
+    [Fact]
+    public void ShouldChangeAppearance()
+    {
+        CategoryAppearance newAppearance = new(HexColor.From("#FAFAFA"));
+
+        var category = new Category(_categoryId, _userId, EntityInformation.New("The Category", "This is the first category"), new(HexColor.Default));
+
+        category.ChangeAppearance(newAppearance);
+
+        Assert.Equal(newAppearance, category.Appearance);
     }
 }

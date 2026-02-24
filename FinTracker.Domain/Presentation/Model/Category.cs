@@ -1,14 +1,18 @@
 namespace FinTracker.Domain.Presentation.Model;
 
-public class Category(string id, string title, string description)
+public readonly record struct CategoryAppearance(HexColor Color);
+
+public class Category(EntityId id, EntityId userId, EntityInformation information, CategoryAppearance appearance)
 {
-    public string Id { get; private init; } = id;
+    public EntityId Id { get; private init; } = id;
 
-    public string Title { get; private set; } = title;
+    public EntityId UserId { get; private init; } = userId;
 
-    public string Description { get; private set; } = description;
+    public EntityInformation Information { get; private set; } = information;
 
-    public void ChangeTitle(string newTitle) => Title = newTitle;
+    public CategoryAppearance Appearance { get; private set; } = appearance;
 
-    public void ChangeDescription(string newDescription) => Description = newDescription;
+    public void ChangeInformation(EntityInformation newInformation) => Information = newInformation;
+
+    public void ChangeAppearance(CategoryAppearance newAppearance) => Appearance = newAppearance;
 }
