@@ -12,7 +12,7 @@ public readonly record struct RecordTransactionRequestData(
     TransactionType TransactionType
 ): IDomainCommandRequestData;
 
-public class RecordTransaction(ITransactionRepository Repository, IDomainBus DomainBus) : IDomainCommand<RecordTransactionRequestData>
+public class RecordTransaction(ITransactionRepository repository, IDomainBus domainBus) : IDomainCommand<RecordTransactionRequestData>
 {
     public async Task Execute(RecordTransactionRequestData requestData)
     {
@@ -23,9 +23,9 @@ public class RecordTransaction(ITransactionRepository Repository, IDomainBus Dom
             requestData.TransactionType
         );
 
-        Repository.Save(newTransaction);
+        repository.Save(newTransaction);
 
-        await DomainBus.Emit(new TransactionRecorded(
+        await domainBus.Emit(new TransactionRecorded(
             newTransaction.Id.ToString(),
             newTransaction.CategoryId.ToString(),
             newTransaction.Money.Amount,

@@ -2,4 +2,4 @@ using FinTracker.Domain.Abstractions;
 
 namespace FinTracker.Domain.Transaction.Events;
 
-public record CategoryCreated(string CategoryId) : IDomainEvent;
+public record DefaultCategoryCreated(string CategoryId, string UserId) : IDomainEvent;
