@@ -18,10 +18,7 @@ public class TransactionRepository : ITransactionRepository
 
     public async Task<Transaction> GetTransaction(TransactionId id)
     {
-        var transaction = await context.Transactions.FirstAsync(t => t.Id == id);
-
-        if (transaction is null) throw new Exception($"Not found transaction! Id: \"{id}\"");
-
+        var transaction = await context.Transactions.FirstAsync(t => t.Id == id) ?? throw new Exception($"Transaction not found! Id: \"{id}\"");
         return transaction;
     }
     public void Save(Transaction transaction)
@@ -40,15 +37,8 @@ public class TransactionRepository : ITransactionRepository
         context.Transactions.Remove(transaction);
     }
 
-    private Transaction CreateStub(TransactionId id)
-    {
-        var entry = context.Transactions.Entry((Transaction)Activator.CreateInstance(typeof(Transaction), nonPublic: true)!);
+    private static Transaction CreateStub(TransactionId id) => new(id, CategoryId.Empty, Money.New(1, Currency.EUR), TransactionType.Income);
 
-        entry.Property(t => t.Id).CurrentValue = id;
-        entry.State = EntityState.Deleted;
-
-        return entry.Entity;
-    }
 }
 
 

@@ -14,7 +14,7 @@ public static class TransactionContext
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).HasConversion(id => id.Value, value => new(value));
-                entity.Property(e => e.UserId).IsRequired();
+                entity.Property(e => e.UserId).HasConversion(id => id.Value, value => UserId.From(value)).IsRequired();
             })
             .HasDefaultSchema(TransactionScheme).Entity<Transaction>(entity =>
             {

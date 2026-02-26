@@ -8,6 +8,9 @@ public static class CommandsConfiguration
     public static IServiceCollection AddCommands(this IServiceCollection services) =>
         services
             .AddScoped<RecordTransaction>()
+            .AddScoped<CreateDefaultCategory>()
+            .AddScoped<CreateCategory>()
+            .AddScoped<DeleteCategory>()
             .AddScoped(typeof(CommandExecutor<,>))
             .AddTransient<BatchCommandExecutor>();
 }

@@ -1,4 +1,3 @@
-using FinTracker.Api.Middlewares;
 using FinTracker.Api.Transactions;
 using FinTracker.Configuration;
 
@@ -10,5 +9,6 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 app.MapGroup("/transactions").MapTransactions();
+app.MapGroup("/categories").MapCategories();
 
 app.Run();

@@ -11,10 +11,7 @@ public class CategoryRepository(AppDbContext context) : ICategoryRepository
 
     public async Task<Category> GetCategory(CategoryId id)
     {
-        var category = await _set.FirstAsync(t => t.Id == id);
-
-        if (category is null) throw new Exception($"Not found category! Id: \"{id}\"");
-
+        var category = await _set.FirstAsync(t => t.Id == id) ?? throw new Exception($"Category not found! Id: \"{id}\"");
         return category;
     }
 
@@ -34,15 +31,7 @@ public class CategoryRepository(AppDbContext context) : ICategoryRepository
         _set.Remove(category);
     }
 
-    private Category CreateStub(CategoryId id)
-    {
-        var entry = _set.Entry((Category)Activator.CreateInstance(typeof(Category), nonPublic: true)!);
-
-        entry.Property(t => t.Id).CurrentValue = id;
-        entry.State = EntityState.Deleted;
-
-        return entry.Entity;
-    }
+    private static Category CreateStub(CategoryId id) => new(id, UserId.From(Guid.NewGuid().ToString()));
 }
 
 
