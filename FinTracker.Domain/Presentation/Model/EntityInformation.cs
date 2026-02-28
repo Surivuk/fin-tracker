@@ -2,7 +2,7 @@ namespace FinTracker.Domain.Presentation.Model;
 
 public class EntityInformationError(string message) : Exception($"Information is invalid. {message}");
 
-public readonly record struct EntityInformation
+public record EntityInformation
 {
     public string Title { get; private init; }
 
@@ -18,6 +18,8 @@ public readonly record struct EntityInformation
     {
         if (string.IsNullOrEmpty(title)) throw new EntityInformationError("Title must not be null or empty!");
 
-        return new(title, description);
+        return new EntityInformation(title, description); // { Title = title, Description = description };
     }
+
+    public static EntityInformation Default => new(String.Empty, String.Empty);
 }

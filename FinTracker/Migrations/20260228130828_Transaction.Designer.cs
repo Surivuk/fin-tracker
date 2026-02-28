@@ -12,15 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinTracker.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260219222801_Init")]
-    partial class Init
+    [Migration("20260228130828_Transaction")]
+    partial class Transaction
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("transaction")
                 .HasAnnotation("ProductVersion", "10.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -35,7 +34,8 @@ namespace FinTracker.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_Transaction_Categories");
 
                     b.ToTable("Categories", "transaction");
                 });
@@ -48,15 +48,12 @@ namespace FinTracker.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Money")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_Transaction_Transactions");
 
                     b.HasIndex("CategoryId");
 
@@ -69,6 +66,31 @@ namespace FinTracker.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("FinTracker.Domain.Transaction.Model.Money", "Money", b1 =>
+                        {
+                            b1.Property<Guid>("TransactionId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<double>("Amount")
+                                .HasColumnType("double precision")
+                                .HasColumnName("MoneyAmount");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("MoneyCurrency");
+
+                            b1.HasKey("TransactionId");
+
+                            b1.ToTable("Transactions", "transaction");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TransactionId");
+                        });
+
+                    b.Navigation("Money")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

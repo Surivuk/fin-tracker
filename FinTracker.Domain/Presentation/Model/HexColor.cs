@@ -4,9 +4,9 @@ namespace FinTracker.Domain.Presentation.Model;
 
 public class InvalidHexColor(string value) : ArgumentException($"Invalid hex color '{value}'", nameof(value));
 
-public readonly partial record struct HexColor
+public partial struct HexColor
 {
-    public string Value { get; private init; }
+    public string Value { get; private set; }
 
     private HexColor(string value) => Value = value.ToUpperInvariant();
 

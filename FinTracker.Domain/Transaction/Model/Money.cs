@@ -3,7 +3,7 @@ namespace FinTracker.Domain.Transaction.Model;
 public class InvalidMoneyAmount(double amount) : Exception($"Invalid money amount, it must be a positive number! Amount: \"{amount}\"");
 public class InvalidCurrency(string value) : Exception($"Invalid currency! Currency: \"{value}\"");
 
-public readonly record struct Currency
+public record Currency
 {
     private static readonly string[] ValidCurrencies = ["EUR"];
 
@@ -21,11 +21,11 @@ public readonly record struct Currency
     }
 }
 
-public readonly record struct Money
+public record Money
 {
-    public double Amount { get; }
+    public double Amount { get; private init; }
 
-    public Currency Currency { get; }
+    public Currency Currency { get; private init; }
 
     private Money(double amount, Currency currency)
     {
@@ -39,4 +39,6 @@ public readonly record struct Money
 
         return new(amount, currency);
     }
+
+    public static Money Default => new(1, Currency.EUR);
 }

@@ -1,12 +1,14 @@
 namespace FinTracker.Persistence.Context;
 
-using FinTracker.Domain.Transaction.Model;
 using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Domain.Transaction.Model.Category> TransactionCategories { get; set; }
+    public DbSet<Domain.Transaction.Model.Transaction> TransactionTransactions { get; set; }
+
+
+    public DbSet<Domain.Presentation.Model.Category> PresentationCategories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseNpgsql(@"Host=localhost;Username=admin;Password=admin;Database=fin_tracker");
@@ -16,5 +18,6 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.BuildTransactionScheme();
+        modelBuilder.BuildPresentationScheme();
     }
 }

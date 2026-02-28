@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FinTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Transaction : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,7 +24,7 @@ namespace FinTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Transaction_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,12 +34,13 @@ namespace FinTracker.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Money = table.Column<string>(type: "text", nullable: false),
+                    MoneyAmount = table.Column<double>(type: "double precision", nullable: false),
+                    MoneyCurrency = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.PrimaryKey("PK_Transaction_Transactions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Transactions_Categories_CategoryId",
                         column: x => x.CategoryId,

@@ -7,7 +7,7 @@ namespace FinTracker.Persistence.Repository;
 
 public class CategoryRepository(AppDbContext context) : ICategoryRepository
 {
-    private readonly DbSet<Category> _set = context.Categories;
+    private readonly DbSet<Category> _set = context.TransactionCategories;
 
     public async Task<Category> GetCategory(CategoryId id)
     {
