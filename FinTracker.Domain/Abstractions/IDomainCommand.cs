@@ -1,8 +1,13 @@
 namespace FinTracker.Domain.Abstractions;
 
-public interface IDomainCommandRequestData;
-
-public interface IDomainCommand<CmdData> where CmdData: IDomainCommandRequestData
+public interface IDomainCommand
 {
-    public Task Execute(CmdData requestData);
+    public Task Execute();
 }
+
+public interface IDomainCommandBuilder<Data>
+{
+    public IDomainCommand With(Data data);
+}
+
+

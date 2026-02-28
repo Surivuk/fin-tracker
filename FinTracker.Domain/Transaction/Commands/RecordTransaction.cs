@@ -10,26 +10,26 @@ public readonly record struct RecordTransactionRequestData(
     CategoryId CategoryId,
     Money Money,
     TransactionType TransactionType
-): IDomainCommandRequestData;
+);
 
-public class RecordTransaction(ITransactionRepository repository, IDomainBus domainBus) : IDomainCommand<RecordTransactionRequestData>
-{
-    public async Task Execute(RecordTransactionRequestData requestData)
-    {
-        var newTransaction = new Model.Transaction(
-            requestData.TransactionId,
-            requestData.CategoryId,
-            requestData.Money,
-            requestData.TransactionType
-        );
+// public class RecordTransaction(ITransactionRepository repository, IDomainBus domainBus) : IDomainCommand<RecordTransactionRequestData>
+// {
+//     public async Task Execute(RecordTransactionRequestData requestData)
+//     {
+//         var newTransaction = new Model.Transaction(
+//             requestData.TransactionId,
+//             requestData.CategoryId,
+//             requestData.Money,
+//             requestData.TransactionType
+//         );
 
-        repository.Save(newTransaction);
+//         repository.Save(newTransaction);
 
-        await domainBus.Emit(new TransactionRecorded(
-            newTransaction.Id.ToString(),
-            newTransaction.CategoryId.ToString(),
-            newTransaction.Money.Amount,
-            newTransaction.Money.Currency.ToString()
-        ));
-    }
-}
+//         await domainBus.Emit(new TransactionRecorded(
+//             newTransaction.Id.ToString(),
+//             newTransaction.CategoryId.ToString(),
+//             newTransaction.Money.Amount,
+//             newTransaction.Money.Currency.ToString()
+//         ));
+//     }
+// }

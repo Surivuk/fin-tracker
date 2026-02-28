@@ -14,4 +14,6 @@ public readonly record struct UserId
 
         return new(guid.ToString());
     }
+
+    public override string ToString() => Value.ToString();
 }

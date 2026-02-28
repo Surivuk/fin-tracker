@@ -1,4 +1,3 @@
-using FinTracker.Domain.Transaction.Commands;
 using FinTracker.Command;
 
 namespace FinTracker.Configuration;
@@ -6,11 +5,5 @@ namespace FinTracker.Configuration;
 public static class CommandsConfiguration
 {
     public static IServiceCollection AddCommands(this IServiceCollection services) =>
-        services
-            .AddScoped<RecordTransaction>()
-            .AddScoped<CreateDefaultCategory>()
-            .AddScoped<CreateCategory>()
-            .AddScoped<DeleteCategory>()
-            .AddScoped(typeof(CommandExecutor<,>))
-            .AddTransient<BatchCommandExecutor>();
+        services.AddScoped<CommandExecutor>();
 }

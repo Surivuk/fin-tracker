@@ -3,18 +3,20 @@ using FinTracker.Domain.Transaction.Model;
 using FinTracker.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinTracker.Persistence.Repository;
+namespace FinTracker.Persistence.Repository.Transaction;
+
+using TheTransaction = Domain.Transaction.Model.Transaction;
 
 public class TransactionRepository(AppDbContext context) : ITransactionRepository
 {
-    public readonly DbSet<Transaction> _dbSet = context.TransactionTransactions;
+    public readonly DbSet<TheTransaction> _dbSet = context.TransactionTransactions;
 
-    public async Task<Transaction> GetTransaction(TransactionId id)
+    public async Task<TheTransaction> GetTransaction(TransactionId id)
     {
         var transaction = await _dbSet.FirstAsync(t => t.Id == id) ?? throw new Exception($"Transaction not found! Id: \"{id}\"");
         return transaction;
     }
-    public void Save(Transaction transaction)
+    public void Save(TheTransaction transaction)
     {
         var entry = context.Entry(transaction);
 
@@ -30,7 +32,7 @@ public class TransactionRepository(AppDbContext context) : ITransactionRepositor
         _dbSet.Remove(transaction);
     }
 
-    private static Transaction CreateStub(TransactionId id) => new(id, CategoryId.Empty, Money.New(1, Currency.EUR), TransactionType.Income);
+    private static TheTransaction CreateStub(TransactionId id) => new(id, CategoryId.Empty, Money.New(1, Currency.EUR), TransactionType.Income);
 
 }
 

@@ -3,7 +3,7 @@ using FinTracker.Domain.Transaction.Model;
 using FinTracker.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinTracker.Persistence.Repository;
+namespace FinTracker.Persistence.Repository.Transaction;
 
 public class CategoryRepository(AppDbContext context) : ICategoryRepository
 {

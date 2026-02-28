@@ -3,12 +3,12 @@ using FinTracker.Persistence.Context;
 
 namespace FinTracker.Command;
 
-public class CommandExecutor<Cmd, CmdData>(AppDbContext Context, Cmd Command) 
-where Cmd : IDomainCommand<CmdData> where CmdData : IDomainCommandRequestData
+public class CommandExecutor(AppDbContext Context)
 {
-    public async Task Execute(CmdData requestData)
+    public async Task ExecuteAsync(params IDomainCommand[] commands)
     {
-        await Command.Execute(requestData);
+        foreach (var command in commands)
+            await command.Execute();
 
         await Context.SaveChangesAsync();
     }

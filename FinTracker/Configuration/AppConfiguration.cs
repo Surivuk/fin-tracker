@@ -8,6 +8,8 @@ public static class AppConfiguration
         services
             .AddDbContext<AppDbContext>()
             .AddDomainBus()
-            .AddRepositories()
-            .AddCommands();
+            .AddCommands()
+
+            .AddTransactionContext()
+            .AddPresentationContext();
 }

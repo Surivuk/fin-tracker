@@ -4,12 +4,17 @@ using FinTracker.Domain.Transaction.Model;
 
 namespace FinTracker.Domain.Transaction.Commands;
 
-public readonly record struct DeleteCategoryRequestData(CategoryId CategoryId) : IDomainCommandRequestData;
+public readonly record struct DeleteCategoryData(CategoryId CategoryId);
 
-public class DeleteCategory(ICategoryRepository repository) : IDomainCommand<DeleteCategoryRequestData>
+public class DeleteCategoryBuilder(ICategoryRepository repository) : IDomainCommandBuilder<DeleteCategoryData>
 {
-    public async Task Execute(DeleteCategoryRequestData requestData)
+    public IDomainCommand With(DeleteCategoryData data) => new DeleteCategory(repository, data);
+}
+
+public class DeleteCategory(ICategoryRepository repository, DeleteCategoryData data) : IDomainCommand
+{
+    public async Task Execute()
     {
-        repository.Delete(requestData.CategoryId);
+        repository.Delete(data.CategoryId);
     }
 }

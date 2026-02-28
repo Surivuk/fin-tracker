@@ -5,16 +5,16 @@ using FinTracker.Domain.Transaction.Model;
 
 namespace FinTracker.Domain.Transaction.Commands;
 
-public readonly record struct CreateDefaultCategoryRequestData(UserId UserId) : IDomainCommandRequestData;
+// public readonly record struct CreateDefaultCategoryRequestData(UserId UserId) : IDomainCommandData;
 
-public class CreateDefaultCategory(ICategoryRepository repository, IDomainBus domainBus) : IDomainCommand<CreateDefaultCategoryRequestData>
-{
-    public async Task Execute(CreateDefaultCategoryRequestData requestData)
-    {
-        var defaultCategory = new Category(CategoryId.New, requestData.UserId);
+// public class CreateDefaultCategory(ICategoryRepository repository, IDomainBus domainBus) : IDomainCommand<CreateDefaultCategoryRequestData>
+// {
+//     public async Task Execute(CreateDefaultCategoryRequestData requestData)
+//     {
+//         var defaultCategory = new Category(CategoryId.New, requestData.UserId);
 
-        repository.Save(defaultCategory);
+//         repository.Save(defaultCategory);
 
-        await domainBus.Emit<DefaultCategoryCreated>(new(defaultCategory.Id.ToString(), defaultCategory.UserId.ToString()));
-    }
-}
+//         await domainBus.Emit<DefaultCategoryCreated>(new(defaultCategory.Id.ToString(), defaultCategory.UserId.ToString()));
+//     }
+// }
