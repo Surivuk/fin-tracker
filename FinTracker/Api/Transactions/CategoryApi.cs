@@ -1,3 +1,4 @@
+using FinTracker.Api.Common;
 using FinTracker.Command;
 using FinTracker.Domain.Presentation.Commands;
 using FinTracker.Domain.Presentation.Model;
@@ -20,30 +21,27 @@ public static class CategoryApi
         group.MapPost("/{id}/delete-category", DeleteCategory).WithName("DeleteCategory");
     }
 
-    private async static Task<IResult> CreateCategory(
-        NewCategoryData data,
-        CreateCategoryBuilder createCategory,
-        CreatePresentationCategoryBuilder createPresentationCategory,
-        CommandExecutor executor)
+    private async static Task<IResult> CreateCategory(NewCategoryData data,
+        CreateCategoryBuilder createCategory, CreatePresentationCategoryBuilder createPresentationCategory, CommandExecutor executor)
     {
         var userId = UserId.From("f356d754-1638-4722-bd16-1ad4ae8376dc");
         var categoryId = CategoryId.New;
 
-        var information = EntityInformation.New(data.Title, data.Description);
-        var appearance = new CategoryAppearance(HexColor.From(data.Color));
+        var info = Result<EntityInformation>.Try(() => EntityInformation.New(data.Title, data.Description));
+        if (info.IsFailure) return ApiErrors.BadRequest("Information", info.Error!);
+
+        var color = Result<HexColor>.Try(() => HexColor.From(data.Color));
+        if (color.IsFailure) return ApiErrors.BadRequest("Color", color.Error!);
 
         await executor.ExecuteAsync(
             createCategory.With(new(categoryId, userId)),
-            createPresentationCategory.With(new(categoryId.ToEntityId(), userId.ToEntityId(), information, appearance))
+            createPresentationCategory.With(new(categoryId.ToEntityId(), userId.ToEntityId(), info.Value!, new CategoryAppearance(color.Value!)))
         );
 
         return Results.Created();
     }
-    private async static Task<IResult> DeleteCategory(
-        string id,
-        DeleteCategoryBuilder deleteCategory,
-        DeletePresentationCategoryBuilder deletePresentationCategory,
-        CommandExecutor executor)
+    private async static Task<IResult> DeleteCategory(string id,
+        DeleteCategoryBuilder deleteCategory, DeletePresentationCategoryBuilder deletePresentationCategory, CommandExecutor executor)
     {
         var categoryId = CategoryId.Parse(id);
 

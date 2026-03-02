@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace FinTracker.Domain.Presentation.Model;
 
-public class InvalidHexColor(string value) : ArgumentException($"Invalid hex color '{value}'", nameof(value));
+public class InvalidHexColor(string value) : Exception($"Invalid hex color '{value}'");
 
 public partial struct HexColor
 {
