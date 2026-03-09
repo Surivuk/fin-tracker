@@ -1,4 +1,12 @@
 <Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FinTracker.DomainCore/FinTracker.DomainCore.csproj" />
+    <Project Path="src/FinTracker.IDomain/FinTracker.IDomain.csproj" />
+    <Project Path="src/FinTracker.Transaction/FinTracker.Transaction.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/FinTracker.Transaction.Test/FinTracker.Transaction.Test.csproj" />
+  </Folder>
   <Project Path="FinTracker.Domain/FinTracker.Domain.csproj" />
   <Project Path="FinTracker.Tests/FinTracker.Tests.csproj" />
   <Project Path="FinTracker/FinTracker.csproj" />
