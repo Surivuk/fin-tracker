@@ -1,6 +1,6 @@
 namespace FinTracker.IDomain;
 
-public interface IDomainEventHandler<IDomainEvent>
+public interface IDomainEventHandler<TEvent> where TEvent : IDomainEvent
 {
-    public Task Handle(IDomainEvent domainEvent);
+    public Task Handle(TEvent domainEvent);
 }

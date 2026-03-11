@@ -5,6 +5,8 @@
     <Project Path="src/FinTracker.Transaction/FinTracker.Transaction.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/FinTracker.DomainCore.Test/FinTracker.DomainCore.Test.csproj" />
+    <Project Path="test/FinTracker.TestKit/FinTracker.TestKit.csproj" />
     <Project Path="test/FinTracker.Transaction.Test/FinTracker.Transaction.Test.csproj" />
   </Folder>
   <Project Path="FinTracker.Domain/FinTracker.Domain.csproj" />
