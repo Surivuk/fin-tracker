@@ -6,7 +6,7 @@ public interface IUserQueries
 {
     public Task<UserCategoryModel> GetUserCategory(string categoryId);
 
-    public Task<IEnumerable<UserCategoryModel>> GetUserCategories();
+    public Task<IReadOnlyList<UserCategoryModel>> GetUserCategories();
 
     // public Task<IEnumerable<TransactionModel>> GetUserTransactions();
 

@@ -3,7 +3,7 @@ using FinTracker.Presentation.Gateway;
 
 namespace FinTracker.Presentation.Queries;
 
-public class GetUserCategories(IUserQueries queries) : IDomainQuery<IEnumerable<UserCategoryModel>>
+public class GetUserCategories(IUserQueries queries) : IDomainQuery<IReadOnlyList<UserCategoryModel>>
 {
-    public Task<IEnumerable<UserCategoryModel>> Execute() => queries.GetUserCategories();
+    public Task<IReadOnlyList<UserCategoryModel>> Execute() => queries.GetUserCategories();
 }

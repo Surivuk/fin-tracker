@@ -1,9 +1,10 @@
+using System.Collections.Immutable;
 using FinTracker.Presentation.Gateway;
 
 internal class UserQueries(InMemory memory, string UserId) : IUserQueries
 {
-    public async Task<IEnumerable<UserCategoryModel>> GetUserCategories() =>
-        memory.Categories.Values.Where(c => c.UserId == UserId).Select(c => new UserCategoryModel(c.Id, c.Title, c.Description, c.Color));
+    public async Task<IReadOnlyList<UserCategoryModel>> GetUserCategories() =>
+        memory.Categories.Values.Where(c => c.UserId == UserId).Select(c => new UserCategoryModel(c.Id, c.Title, c.Description, c.Color)).ToImmutableList();
 
     public async Task<UserCategoryModel> GetUserCategory(string categoryId)
     {
