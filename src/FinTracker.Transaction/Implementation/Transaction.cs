@@ -1,7 +1,5 @@
 using FinTracker.IDomain;
 
-namespace FinTracker.Transaction.Implementation;
-
 internal class TransactionEntity(EntityId id, EntityId categoryId, Money money, TransactionType type)
 {
     public EntityId Id { get; private init; } = id;

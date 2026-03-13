@@ -1,7 +1,5 @@
 using FinTracker.IDomain;
 
-namespace FinTracker.Transaction.Implementation;
-
 internal class InvalidMoneyAmount(double amount) : Exception($"Invalid money amount, it must be a positive number! Amount: \"{amount}\"");
 
 internal class InvalidCurrency(string value) : Exception($"Invalid currency! Currency: \"{value}\"");

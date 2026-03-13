@@ -1,7 +1,5 @@
 using FinTracker.IDomain;
 
-namespace FinTracker.Transaction.Implementation;
-
 internal class InvalidTransactionType(string type) : Exception($"Invalid transaction type! Type: \"{type}\"");
 
 internal readonly record struct TransactionType
