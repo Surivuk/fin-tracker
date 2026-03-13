@@ -14,6 +14,8 @@ public static class ServiceCollectionExtension
             .AddScoped<RecordTransactionBuilder>()
             .AddScoped<RemoveTransactionBuilder>()
 
-            .AddScoped<GetUsersCategories>();
+            .AddScoped<GetUsersCategories>()
+            .AddScoped<GetUserTransaction>()
+            .AddScoped<GetUserTransactions>();
     }
 }
