@@ -1,12 +1,11 @@
-﻿using FinTracker.Transaction.Commands;
+﻿using FinTracker.TestKit;
+using FinTracker.Transaction.Commands;
 
 namespace FinTracker.Transaction.Test;
 
 public sealed class BuildingCreateCategory : IDisposable
 {
-    private readonly TestScope _scope;
-
-    public BuildingCreateCategory() => _scope = TestScope.New;
+    private readonly TestScope _scope = TestSetup.CreateScope("fbcf2ef2-1a5b-4ddd-84c0-f8021baeb899");
 
     public void Dispose() => _scope.Dispose();
 

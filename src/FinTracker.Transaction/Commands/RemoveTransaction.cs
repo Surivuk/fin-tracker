@@ -5,7 +5,7 @@ using FinTracker.Transaction.Repository;
 namespace FinTracker.Transaction.Commands;
 
 public readonly record struct RemoveTransactionRequestData(string TransactionId);
-public class RemoveTransactionBuilder(ITransactionRepository repository, IDomainBus domainBus) : IDomainCommandBuilder<RecordTransactionRequestData>
+public class RemoveTransactionBuilder(ITransactionRepository repository, IDomainEventOutbox outbox) : IDomainCommandBuilder<RecordTransactionRequestData>
 {
     public DomainCommandResult TryWith(RecordTransactionRequestData data)
     {
@@ -13,7 +13,7 @@ public class RemoveTransactionBuilder(ITransactionRepository repository, IDomain
 
         if (id.IsFailure) return new(typeof(RecordTransaction), id.Error!);
 
-        return new(new RemoveTransaction(repository, domainBus, new(id.Value)));
+        return new(new RemoveTransaction(repository, outbox, new(id.Value)));
     }
 }
 
@@ -21,13 +21,13 @@ internal readonly record struct RemoveTransactionData(EntityId TransactionId);
 public class RemoveTransaction : IDomainCommand
 {
     private readonly ITransactionRepository repository;
-    private readonly IDomainBus domainBus;
+    private readonly IDomainEventOutbox outbox;
     private readonly RemoveTransactionData data;
 
-    internal RemoveTransaction(ITransactionRepository repository, IDomainBus domainBus, RemoveTransactionData data)
+    internal RemoveTransaction(ITransactionRepository repository, IDomainEventOutbox outbox, RemoveTransactionData data)
     {
         this.repository = repository;
-        this.domainBus = domainBus;
+        this.outbox = outbox;
         this.data = data;
     }
 
@@ -35,6 +35,6 @@ public class RemoveTransaction : IDomainCommand
     {
         var id = data.TransactionId.Value;
         repository.Delete(id);
-        await domainBus.Emit(new TransactionRemoved(id));
+        outbox.Add(new TransactionRemoved(id));
     }
 }

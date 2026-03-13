@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../../src/FinTracker.Transaction/FinTracker.Transaction.csproj" />
+    <ProjectReference Include="../FinTracker.TestKit/FinTracker.TestKit.csproj" />
   </ItemGroup>
 
   <ItemGroup>

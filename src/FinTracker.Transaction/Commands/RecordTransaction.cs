@@ -7,7 +7,7 @@ namespace FinTracker.Transaction.Commands;
 
 public readonly record struct RecordTransactionRequestData(
     string TransactionId, string CategoryId, double MoneyAmount, string Currency, string TransactionType);
-public class RecordTransactionBuilder(ITransactionRepository repository, IDomainBus domainBus) : IDomainCommandBuilder<RecordTransactionRequestData>
+public class RecordTransactionBuilder(ITransactionRepository repository, IDomainEventOutbox outbox) : IDomainCommandBuilder<RecordTransactionRequestData>
 {
     public DomainCommandResult TryWith(RecordTransactionRequestData data)
     {
@@ -25,7 +25,7 @@ public class RecordTransactionBuilder(ITransactionRepository repository, IDomain
 
         RecordTransactionData requestData = new(id.Value, categoryId.Value, new(moneyAmount.Value, moneyCurrency.Value), type.Value);
 
-        return new(new RecordTransaction(repository, domainBus, requestData));
+        return new(new RecordTransaction(repository, outbox, requestData));
     }
 }
 
@@ -34,13 +34,13 @@ internal readonly record struct RecordTransactionData(
 public class RecordTransaction : IDomainCommand
 {
     private readonly ITransactionRepository repository;
-    private readonly IDomainBus domainBus;
+    private readonly IDomainEventOutbox outbox;
     private readonly RecordTransactionData data;
 
-    internal RecordTransaction(ITransactionRepository repository, IDomainBus domainBus, RecordTransactionData data)
+    internal RecordTransaction(ITransactionRepository repository, IDomainEventOutbox outbox, RecordTransactionData data)
     {
         this.repository = repository;
-        this.domainBus = domainBus;
+        this.outbox = outbox;
         this.data = data;
     }
 
@@ -55,7 +55,7 @@ public class RecordTransaction : IDomainCommand
 
         repository.Save(newTransaction.ToModel());
 
-        await domainBus.Emit(new TransactionRecorded(
+        outbox.Add(new TransactionRecorded(
             newTransaction.Id.Value,
             newTransaction.CategoryId.Value,
             newTransaction.Money.Amount.Value,
