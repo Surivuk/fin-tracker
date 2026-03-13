@@ -1,6 +1,5 @@
 using FinTracker.IDomain;
 using FinTracker.Transaction.Events;
-using FinTracker.Transaction.Implementation;
 using FinTracker.Transaction.Repository;
 
 namespace FinTracker.Transaction.Commands;
