@@ -8,7 +8,7 @@ internal class TransactionSchema(AppDbContext context)
         context.Set<CategoryModel>(),
         c => c.Id,
         id => new(id, string.Empty),
-        c => context.Entry(c)
+        c => TrackingStatusProcessor.ProcessForUpdate(context.ChangeTracker.Entries<CategoryModel>().FirstOrDefault(e => e.Entity.Id == c.Id))
     );
     public IQueryable<CategoryModel> CategoryQuery => context.Set<CategoryModel>().AsNoTracking();
 
@@ -17,7 +17,7 @@ internal class TransactionSchema(AppDbContext context)
         context.Set<TransactionModel>(),
         c => c.Id,
         id => new(id, string.Empty, default, string.Empty, string.Empty),
-        c => context.Entry(c)
+        c => TrackingStatusProcessor.ProcessForUpdate(context.ChangeTracker.Entries<TransactionModel>().FirstOrDefault(e => e.Entity.Id == c.Id))
     );
     public IQueryable<TransactionModel> TransactionQuery => context.Set<TransactionModel>().AsNoTracking();
 }

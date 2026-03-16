@@ -4,25 +4,36 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 internal class RepositoryException(string message) : Exception(message);
 
+internal static class TrackingStatusProcessor
+{
+    public static bool ProcessForUpdate<T>(EntityEntry<T> ?existing) where T : class
+    {
+        if (existing != null)
+        {
+            existing.State = EntityState.Detached;
+            return false;
+        }
+
+        return true;
+    }
+}
+
 internal class Repository<Aggregate, AggregateId>(
     DbSet<Aggregate> set,
     IQueryable<Aggregate> queryable,
     Expression<Func<Aggregate, AggregateId>> keySelector,
     Func<AggregateId, Aggregate> createStub,
-    Func<Aggregate, EntityEntry<Aggregate>> getTrackingStatus
+    Func<Aggregate, bool> processTrackingStatus
 ) where Aggregate : class
 {
-    public async Task<Aggregate> Find(AggregateId id)
-    {
-        var category = await queryable.FirstAsync(BuildKeyExpression(id)) ?? throw new RepositoryException($"{typeof(Aggregate).Name} not found! Id: \"{id}\"");
-        return category;
-    }
+    public async Task<Aggregate> Find(AggregateId id) => await queryable
+        .FirstAsync(BuildKeyExpression(id)) ?? throw new RepositoryException($"{typeof(Aggregate).Name} not found! Id: \"{id}\"");
 
     public void Save(Aggregate category)
     {
-        var entry = getTrackingStatus(category);
+        var isNew = processTrackingStatus(category);
 
-        if (entry.State == EntityState.Detached)
+        if (isNew)
             set.Add(category);
         else
             set.Update(category);

@@ -10,6 +10,14 @@ readonly record struct NewCategoryData(
    string Color
 );
 
+readonly record struct ChangeInformationData(
+   string Title,
+   string Description
+);
+readonly record struct ChangeAppearanceData(
+   string Color
+);
+
 internal static class CategoryApi
 {
     public static void MapCategories(this RouteGroupBuilder group)
@@ -20,6 +28,8 @@ internal static class CategoryApi
 
         group.RequireAuthorization("CategoryOwner");
         group.MapGet("/{id}", GetCategory).WithName("GetCategory");
+        group.MapPost("/{id}/change-information", ChangeInformation).WithName("ChangeCategoryInformation");
+        group.MapPost("/{id}/change-appearance", ChangeAppearance).WithName("ChangeCategoryAppearance");
         group.MapPost("/{id}/delete-category", DeleteCategory).WithName("DeleteCategory");
     }
 
@@ -46,6 +56,30 @@ internal static class CategoryApi
         await executor.ExecuteAsync([categoryResult.Command!, presentationResult.Command!]);
 
         return Results.Created();
+    }
+
+    private async static Task<IResult> ChangeInformation(string id, ChangeInformationData data,
+        ChangeCategoryInformationBuilder builder, DomainCommandExecutor executor)
+    {
+        var cmd = builder.TryWith(new(id, data.Title, data.Description));
+
+        if (cmd.IsFailure) return Results.BadRequest();
+
+        await executor.ExecuteAsync(cmd.Command!);
+
+        return Results.NoContent();
+    }
+
+    private async static Task<IResult> ChangeAppearance(string id, ChangeAppearanceData data,
+        ChangeCategoryAppearanceBuilder builder, DomainCommandExecutor executor)
+    {
+        var cmd = builder.TryWith(new(id, data.Color));
+
+        if (cmd.IsFailure) return Results.BadRequest();
+
+        await executor.ExecuteAsync(cmd.Command!);
+
+        return Results.NoContent();
     }
 
     private async static Task<IResult> DeleteCategory(
