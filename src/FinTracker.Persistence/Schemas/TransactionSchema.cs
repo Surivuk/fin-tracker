@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using FinTracker.Transaction.Repository;
+using FinTracker.Transaction.Gateway;
 
 internal class TransactionSchema(AppDbContext context)
 {

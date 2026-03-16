@@ -1,7 +1,7 @@
 using FinTracker.IDomain;
 using FinTracker.TestKit;
 using FinTracker.Transaction;
-using FinTracker.Transaction.Repository;
+using FinTracker.Transaction.Gateway;
 using Microsoft.Extensions.DependencyInjection;
 
 internal static class TestSetup

@@ -1,4 +1,4 @@
-namespace FinTracker.Transaction.Repository;
+namespace FinTracker.Transaction.Gateway;
 
 public record CategoryModel(string Id, string UserId);
 

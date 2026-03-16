@@ -1,4 +1,4 @@
-using FinTracker.Transaction.Repository;
+using FinTracker.Transaction.Gateway;
 using Microsoft.EntityFrameworkCore;
 
 internal class TransactionUserQueries(AppDbContext context, string userId) : IUserQueries

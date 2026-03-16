@@ -1,5 +1,5 @@
 using FinTracker.IDomain;
-using FinTracker.Transaction.Repository;
+using FinTracker.Transaction.Gateway;
 
 internal static class TransactionConversions
 {

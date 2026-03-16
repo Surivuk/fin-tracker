@@ -1,4 +1,4 @@
-using FinTracker.Transaction.Repository;
+using FinTracker.Transaction.Gateway;
 
 internal class TransactionTransactionRepository(AppDbContext context) : ITransactionRepository
 {

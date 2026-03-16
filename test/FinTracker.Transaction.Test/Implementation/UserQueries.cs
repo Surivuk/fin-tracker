@@ -1,4 +1,4 @@
-using FinTracker.Transaction.Repository;
+using FinTracker.Transaction.Gateway;
 
 internal class UserQueries(InMemory memory, string UserId) : IUserQueries
 {
