@@ -1,13 +1,14 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 internal class RepositoryException(string message) : Exception(message);
 
 internal static class TrackingStatusProcessor
 {
-    public static bool ProcessForUpdate<T>(EntityEntry<T> ?existing) where T : class
+    public static bool PrepareForUpdate<T>(AppDbContext context, Func<T, bool> isSame) where T : class
     {
+        var existing = context.ChangeTracker.Entries<T>().FirstOrDefault(e => isSame(e.Entity));
+
         if (existing != null)
         {
             existing.State = EntityState.Detached;
