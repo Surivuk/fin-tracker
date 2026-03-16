@@ -30,7 +30,8 @@ api.MapGroup("/categories")
         .MapCategory()
         .MapGroup("/transactions")
             .MapTransactions()
-            .MapGroup("/{transactionId}").MapTransaction();
+            .MapGroup("/{transactionId}")
+                .MapTransaction();
 
 api.MapGet("/ping", () => Results.Ok(new { message = "PONG" }));
 

@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/FinTracker.DomainCore/FinTracker.DomainCore.csproj" />
+    <Project Path="src/FinTracker.Identity/FinTracker.Identity.csproj" />
     <Project Path="src/FinTracker.IDomain/FinTracker.IDomain.csproj" />
     <Project Path="src/FinTracker.Persistence/FinTracker.Persistence.csproj" />
     <Project Path="src/FinTracker.Presentation/FinTracker.Presentation.csproj" />
