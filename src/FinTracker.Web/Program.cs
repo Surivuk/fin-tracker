@@ -1,34 +1,38 @@
 using FinTracker.DomainCore;
-using FinTracker.IDomain;
 using FinTracker.Persistence;
 using FinTracker.Presentation;
-using FinTracker.Presentation.Queries;
+using FinTracker.Transaction;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddPersistence(p => "5c44af57-ebdd-430f-b88e-6f890cda82d9");
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IUserIdProvider, UserIdProvider>();
+builder.Services.AddPersistence(p => p.GetRequiredService<IUserIdProvider>().GetUserId());
+
 builder.Services.AddDomainCoreModule();
+builder.Services.AddTransactionModel();
 builder.Services.AddPresentationModel();
 
+builder.Services.AddApiAuth();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
-app.UseHttpsRedirection();
-
+// app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 
-app.MapGet("/categories", async (GetUserCategories query) =>
-{
-    return Results.Json(await query.Execute());
-})
-.WithName("GetWeatherForecast");
+var api = app.MapGroup("/api").RequireAuthorization();
+
+api.MapGroup("/categories").MapCategories();
+api.MapGet("/ping", () => Results.Ok(new { message = "PONG" }));
 
 app.Run();

@@ -9,10 +9,16 @@ public static class ServiceCollectionExtension
     {
         return services
             .AddDbContext<AppDbContext>()
-            .AddScoped<IUnitOfWork, UnitOfWork>()
+
+            // Presentation
             .AddScoped<Presentation.Gateway.IUserQueries>(p => new PresentationUserQueries(p.GetRequiredService<AppDbContext>(), getUserId(p)))
             .AddScoped<Presentation.Gateway.ICategoryRepository, PresentationCategoryRepository>()
 
-            .AddScoped<Transaction.Repository.ICategoryRepository, TransactionCategoryRepository>();
+            // Transaction
+            .AddScoped<Transaction.Repository.ICategoryRepository, TransactionCategoryRepository>()
+            .AddScoped<Transaction.Repository.ITransactionRepository, TransactionTransactionRepository>()
+            .AddScoped<Transaction.Repository.IUserQueries>(p => new TransactionUserQueries(p.GetRequiredService<AppDbContext>(), getUserId(p)))
+
+            .AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }

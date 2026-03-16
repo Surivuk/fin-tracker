@@ -12,14 +12,14 @@ internal class TransactionSchema(AppDbContext context)
     );
     public IQueryable<CategoryModel> CategoryQuery => context.Set<CategoryModel>().AsNoTracking();
 
-    public Repository<TransactionModel, string> TransactionTransactions => new(
+    public Repository<TransactionModel, string> Transactions => new(
         context.Set<TransactionModel>(),
         context.Set<TransactionModel>(),
         c => c.Id,
         id => new(id, string.Empty, default, string.Empty, string.Empty),
         c => context.Entry(c)
     );
-    public IQueryable<TransactionModel> TransactionTransactionQueryable => context.Set<TransactionModel>().AsNoTracking();
+    public IQueryable<TransactionModel> TransactionQuery => context.Set<TransactionModel>().AsNoTracking();
 }
 
 internal static class TransactionSchemaExtension
