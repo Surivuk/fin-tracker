@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 
 internal static class ServiceCollectionExtension
 {
-    public static IServiceCollection AddApiAuth(this IServiceCollection services)
+    public static IServiceCollection AddAuth(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
         services.AddScoped<IUserIdProvider, UserIdProvider>();

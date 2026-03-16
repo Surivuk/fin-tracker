@@ -6,25 +6,20 @@ using FinTracker.Transaction;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-
-builder.Services.AddPersistence(p => p.GetRequiredService<IUserIdProvider>().GetUserId());
+builder.Services.AddAuth();
 
 builder.Services.AddDomainCoreModule();
 builder.Services.AddTransactionModel();
 builder.Services.AddPresentationModel();
-
-builder.Services.AddApiAuth();
+builder.Services.AddPersistence(p => p.GetRequiredService<IUserIdProvider>().GetUserId());
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
-// app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 var api = app.MapGroup("/api").RequireAuthorization();
 
