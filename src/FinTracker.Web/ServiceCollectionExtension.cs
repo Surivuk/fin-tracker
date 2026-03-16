@@ -6,6 +6,8 @@ internal static class ServiceCollectionExtension
 {
     public static IServiceCollection AddApiAuth(this IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUserIdProvider, UserIdProvider>();
         services.AddScoped<IAuthorizationHandler, CategoryOwnerHandler>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

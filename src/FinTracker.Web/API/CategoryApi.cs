@@ -20,43 +20,17 @@ readonly record struct ChangeAppearanceData(
 
 internal static class CategoryApi
 {
-    public static void MapCategories(this RouteGroupBuilder group)
+    public static RouteGroupBuilder MapCategory(this RouteGroupBuilder group)
     {
-        group.MapGet("/", GetCategories).WithName("GetCategories");
+        group.MapGet("/", GetCategory).WithName("GetCategory");
+        group.MapPost("/change-information", ChangeInformation).WithName("ChangeCategoryInformation");
+        group.MapPost("/change-appearance", ChangeAppearance).WithName("ChangeCategoryAppearance");
+        group.MapPost("/delete-category", DeleteCategory).WithName("DeleteCategory");
 
-        group.MapPost("/create-category", CreateCategory).WithName("CreateCategory");
-
-        group.RequireAuthorization("CategoryOwner");
-        group.MapGet("/{id}", GetCategory).WithName("GetCategory");
-        group.MapPost("/{id}/change-information", ChangeInformation).WithName("ChangeCategoryInformation");
-        group.MapPost("/{id}/change-appearance", ChangeAppearance).WithName("ChangeCategoryAppearance");
-        group.MapPost("/{id}/delete-category", DeleteCategory).WithName("DeleteCategory");
+        return group;
     }
-
-    private async static Task<IResult> GetCategories(GetUserCategories query) => Results.Json(await query.Execute());
 
     private async static Task<IResult> GetCategory(string id, GetUserCategory query) => Results.Json(await query.Execute(id));
-
-    private async static Task<IResult> CreateCategory(
-        NewCategoryData data,
-        IUserIdProvider idProvider,
-        DomainCommandExecutor executor,
-        CreateCategoryBuilder categoryBuilder,
-        CreatePresentationCategoryBuilder presentationBuilder)
-    {
-        var categoryId = EntityId.New.ToString();
-        var userId = idProvider.GetUserId();
-
-        var categoryResult = categoryBuilder.TryWith(new(categoryId, userId));
-        var presentationResult = presentationBuilder.TryWith(new(categoryId, userId, data.Title, data.Description, data.Color));
-
-        if (categoryResult.IsFailure) return Results.BadRequest();
-        if (presentationResult.IsFailure) return Results.BadRequest();
-
-        await executor.ExecuteAsync([categoryResult.Command!, presentationResult.Command!]);
-
-        return Results.Created();
-    }
 
     private async static Task<IResult> ChangeInformation(string id, ChangeInformationData data,
         ChangeCategoryInformationBuilder builder, DomainCommandExecutor executor)
