@@ -19,6 +19,7 @@ public static class ServiceCollectionExtension
             .AddScoped<Transaction.Gateway.ITransactionRepository, TransactionTransactionRepository>()
             .AddScoped<Transaction.Gateway.IUserQueries>(p => new TransactionUserQueries(p.GetRequiredService<AppDbContext>(), getUserId(p)))
 
+            .AddScoped<Transaction.Gateway.ICategoryOwnership, CategoryOwnership>()
             .AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }
