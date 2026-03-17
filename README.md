@@ -10,6 +10,7 @@ FinTracker is a personal finance management app built to demonstrate real-world 
     - [x] Presentation persistence
     - [ ] Identity persistence
 - [x] Web Api
+    - [ ] All endpoints
 - [x] Identity model
 - [ ] Reporting model
 - [ ] Dockerize
