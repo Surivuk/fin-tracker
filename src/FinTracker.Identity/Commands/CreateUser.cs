@@ -36,7 +36,7 @@ public class CreateUser : IDomainCommand
 
     public async Task Execute()
     {
-        await gateway.CreateUserAsync(data.Email.ToString(), data.Name.FirstName, data.Name.LastName, data.Credentials.ToString());
+        var userId = await gateway.CreateUserAsync(data.Email.ToString(), data.Name.FirstName, data.Name.LastName, data.Credentials.ToString());
 
         // Emit message
     }
